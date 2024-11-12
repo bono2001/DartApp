@@ -2,10 +2,11 @@
 {
     public class Game
     {
-        public int GameId { get; set; }
-        public GameMode GameMode { get; set; }
-        public List<Player> Players { get; set; }
+        public int GameId { get; set; } // Primaire sleutel
+        public int GameModeId { get; set; } // Foreign key
+        public GameMode GameMode { get; set; } // Navigatie-eigenschap
 
+        public ICollection<Player> Players { get; set; } // Navigatie naar spelers
 
         public Game()
         {

@@ -2,7 +2,7 @@
 
 public class Tactics : GameMode
 {
-    public List<TacticsTarget> TacticsTargets { get; set; }
+    public ICollection<TacticsTarget> TacticsTargets { get; set; } // Navigatie-eigenschap
 
     public Tactics()
     {
