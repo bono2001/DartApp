@@ -7,7 +7,11 @@ namespace DartApp.Models
         public int GameModeId { get; set; }
         public string Name { get; set; }
         public List<Player> Players { get; set; }
-        public Player CurrentTurn { get; set; }
+
+
+        // Relatie naar de speler die aan de beurt is
+        public int? CurrentTurnId { get; set; } // Foreign key
+        public Player CurrentTurn { get; set; } // Navigatie-eigenschap
         public bool IsFinished { get; set; }
 
 
