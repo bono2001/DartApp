@@ -6,7 +6,7 @@ namespace DartApp.Models
     {
         public int GameModeId { get; set; }
         public string Name { get; set; }
-        public List<Player> Players
+        public List<Player> Players { get; set; }
         public Player CurrentTurn { get; set; }
         public bool IsFinished { get; set; }
 
