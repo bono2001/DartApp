@@ -1,35 +1,56 @@
-﻿@model IEnumerable<DartApp.Models.Game>
+﻿@model DartApp.Models.Game301ViewModel
 
-@{
-    ViewData["Title"] = "Index";
-}
+<div class="container">
+    @Html.AntiForgeryToken()
+    <h1>301 Game</h1>
+    <p>Speler: @Model.PlayerName</p>
+    <p>Huidige score: <span id="current-score">@Model.CurrentScore</span></p>
 
-<h1>Index</h1>
+    <div class="dartboard-container">
+        <img src="/images/dartboard.png" alt="Dartbord" usemap="#dartboard-map" class="dartboard">
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.GameMode)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.GameMode.GameModeId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.GameId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.GameId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.GameId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+        <map name="dartboard-map">
+            <area shape="circle" coords="150,150,20" alt="Bullseye" onclick="throwDart(50)">
+            <area shape="circle" coords="150,150,50" alt="Inner Bull" onclick="throwDart(25)">
+            <area shape="poly" coords="150,0,170,40,130,40" alt="20" onclick="throwDart(20)">
+            <area shape="poly" coords="150,300,170,260,130,260" alt="3" onclick="throwDart(3)">
+        </map>
+    </div>
+
+    <div id="feedback" class="alert alert-info" style="display:none;"></div>
+</div>
+
+<script>
+    function throwDart(score) {
+        fetch('/Games/UpdateScore', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+            },
+            body: JSON.stringify({ gameId: 1, playerId: 1, score: score })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('current-score').innerText = data.newScore;
+                    document.getElementById('feedback').innerText = `Je hebt ${score} gegooid.`;
+                    document.getElementById('feedback').style.display = 'block';
+                } else {
+                    alert(data.message);
+                }
+            });
+    }
+</script>
+
+<style>
+    .dartboard-container {
+        text-align: center;
+        margin: 20px 0;
+    }
+
+    .dartboard {
+        max-width: 300px;
+        border: 2px solid #000;
+    }
+</style>
