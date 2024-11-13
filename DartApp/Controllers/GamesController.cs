@@ -14,20 +14,13 @@ namespace DartApp.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
-        {
-            var dartAppContext = _context.Games.Include(g => g.GameMode);
-            return View(await dartAppContext.ToListAsync());
-        }
-
-        public IActionResult Play301(int gameId)
+        public IActionResult Index(int gameId)
         {
             var game = _context.Games
                 .Include(g => g.Players)
                 .FirstOrDefault(g => g.GameId == gameId);
 
-            if (game == null)
-                return NotFound();
+            if (game == null) return NotFound();
 
             var model = new Game301ViewModel
             {
@@ -35,31 +28,33 @@ namespace DartApp.Controllers
                 CurrentScore = game.Players.First().Score
             };
 
-            return View(model);
+            return View(model); // Past bij @model Game301ViewModel
         }
+
 
         [HttpPost]
         public IActionResult UpdateScore(int gameId, int playerId, int score)
         {
-            var game = _context.Games
-                .Include(g => g.Players)
-                .FirstOrDefault(g => g.GameId == gameId);
-
-            if (game == null)
-                return Json(new { success = false, message = "Game niet gevonden." });
-
-            var player = game.Players.FirstOrDefault(p => p.PlayerId == playerId);
-
+            var player = _context.Players.FirstOrDefault(p => p.PlayerId == playerId && p.GameId == gameId);
             if (player == null)
-                return Json(new { success = false, message = "Speler niet gevonden." });
+            {
+                return Json(new { success = false, message = "Speler niet gevonden!" });
+            }
 
+            // Controleer of de score geldig is
             if (score > player.Score)
-                return Json(new { success = false, message = "Bust! Probeer opnieuw." });
+            {
+                return Json(new { success = false, message = "Bust! Score is te hoog." });
+            }
 
+            // Update de score
             player.Score -= score;
 
+            // Check voor winst
             if (player.Score == 0)
-                return Json(new { success = true, newScore = 0, message = $"{player.Name} heeft gewonnen!" });
+            {
+                return Json(new { success = true, newScore = 0, message = "Gewonnen!" });
+            }
 
             _context.SaveChanges();
 

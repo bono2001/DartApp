@@ -1,5 +1,5 @@
-using DartApp.Data;
 using DartApp.Models;
+using DartApp.Data; // Zorg ervoor dat je namespace correct is
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
@@ -8,32 +8,19 @@ namespace DartApp.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-        private readonly DartAppContext _context; // Voeg dit veld toe
+        private readonly DartAppContext _context;
 
-        // Constructor met dependency injection
-        public HomeController(ILogger<HomeController> logger, DartAppContext context)
+        public HomeController(DartAppContext context)
         {
-            _logger = logger;
-            _context = context; // Initialiseer de context
+            _context = context;
         }
 
         public IActionResult Index()
         {
-            // Haal games op uit de database
+            // Haal een lijst van games op
             var games = _context.Games.Include(g => g.GameMode).ToList();
-            return View(games); // Controleer dat dit klopt met je view's @model
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View(games); // Dit moet overeenkomen met de view
         }
     }
+
 }

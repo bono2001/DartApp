@@ -27,4 +27,5 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Games}/{action=Index}/{id?}");
 
+
 app.Run();
