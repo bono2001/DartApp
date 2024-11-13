@@ -1,23 +1,18 @@
 ﻿@model DartApp.Models.Game301ViewModel
 
-<div class="container">
-    @Html.AntiForgeryToken()
-    <h1>301 Game</h1>
-    <p>Speler: @Model.PlayerName</p>
-    <p>Huidige score: <span id="current-score">@Model.CurrentScore</span></p>
+<h1>301 Game</h1>
+<p>Speler: @Model.PlayerName</p>
+<p>Huidige score: <span id="current-score">@Model.CurrentScore</span></p>
 
-    <div class="dartboard-container">
-        <img src="/images/dartboard.png" alt="Dartbord" usemap="#dartboard-map" class="dartboard">
+<div class="dartboard-container">
+    <img src="/images/dartboard.png" alt="Dartbord" usemap="#dartboard-map" class="dartboard">
 
-        <map name="dartboard-map">
-            <area shape="circle" coords="150,150,20" alt="Bullseye" onclick="throwDart(50)">
-            <area shape="circle" coords="150,150,50" alt="Inner Bull" onclick="throwDart(25)">
-            <area shape="poly" coords="150,0,170,40,130,40" alt="20" onclick="throwDart(20)">
-            <area shape="poly" coords="150,300,170,260,130,260" alt="3" onclick="throwDart(3)">
-        </map>
-    </div>
-
-    <div id="feedback" class="alert alert-info" style="display:none;"></div>
+    <map name="dartboard-map">
+        <area shape="circle" coords="150,150,20" alt="Bullseye" onclick="throwDart(50)">
+        <area shape="circle" coords="150,150,50" alt="Inner Bull" onclick="throwDart(25)">
+        <area shape="poly" coords="150,0,170,40,130,40" alt="20" onclick="throwDart(20)">
+        <area shape="poly" coords="150,300,170,260,130,260" alt="3" onclick="throwDart(3)">
+    </map>
 </div>
 
 <script>
@@ -26,16 +21,13 @@
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
             },
-            body: JSON.stringify({ gameId: 1, playerId: 1, score: score })
+            body: JSON.stringify({ score: score })
         })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
                     document.getElementById('current-score').innerText = data.newScore;
-                    document.getElementById('feedback').innerText = `Je hebt ${score} gegooid.`;
-                    document.getElementById('feedback').style.display = 'block';
                 } else {
                     alert(data.message);
                 }

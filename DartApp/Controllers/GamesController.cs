@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using DartApp.Data;
+﻿using DartApp.Data;
 using DartApp.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace DartApp.Controllers
 {
@@ -16,49 +16,22 @@ namespace DartApp.Controllers
 
         public IActionResult Index(int gameId)
         {
+            // Haal de game op uit de database
             var game = _context.Games
                 .Include(g => g.Players)
+                .Include(g => g.GameMode)
                 .FirstOrDefault(g => g.GameId == gameId);
 
             if (game == null) return NotFound();
 
+            // Maak een viewmodel aan voor de 301-game
             var model = new Game301ViewModel
             {
-                PlayerName = game.Players.First().Name,
-                CurrentScore = game.Players.First().Score
+                PlayerName = game.Players.FirstOrDefault()?.Name ?? "Speler 1",
+                CurrentScore = 301 // Beginscore
             };
 
-            return View(model); // Past bij @model Game301ViewModel
-        }
-
-
-        [HttpPost]
-        public IActionResult UpdateScore(int gameId, int playerId, int score)
-        {
-            var player = _context.Players.FirstOrDefault(p => p.PlayerId == playerId && p.GameId == gameId);
-            if (player == null)
-            {
-                return Json(new { success = false, message = "Speler niet gevonden!" });
-            }
-
-            // Controleer of de score geldig is
-            if (score > player.Score)
-            {
-                return Json(new { success = false, message = "Bust! Score is te hoog." });
-            }
-
-            // Update de score
-            player.Score -= score;
-
-            // Check voor winst
-            if (player.Score == 0)
-            {
-                return Json(new { success = true, newScore = 0, message = "Gewonnen!" });
-            }
-
-            _context.SaveChanges();
-
-            return Json(new { success = true, newScore = player.Score });
+            return View(model); // Views/Games/Index.cshtml
         }
     }
 }

@@ -1,8 +1,7 @@
+using DartApp.Data;
 using DartApp.Models;
-using DartApp.Data; // Zorg ervoor dat je namespace correct is
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
 
 namespace DartApp.Controllers
 {
@@ -17,10 +16,16 @@ namespace DartApp.Controllers
 
         public IActionResult Index()
         {
-            // Haal een lijst van games op
+            // Haal een lijst van games op uit de database
             var games = _context.Games.Include(g => g.GameMode).ToList();
-            return View(games); // Dit moet overeenkomen met de view
+
+            // Geef deze lijst door aan de view
+            return View(games); // Past bij Views/Home/Index.cshtml
+        }
+
+        public IActionResult Privacy()
+        {
+            return View(); // Views/Home/Privacy.cshtml
         }
     }
-
 }
