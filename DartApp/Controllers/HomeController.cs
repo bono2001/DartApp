@@ -19,13 +19,19 @@ namespace DartApp.Controllers
             // Haal een lijst van games op uit de database
             var games = _context.Games.Include(g => g.GameMode).ToList();
 
-            // Geef deze lijst door aan de view
-            return View(games); // Past bij Views/Home/Index.cshtml
+            // Controleer of er games in de database staan
+            if (games == null || !games.Any())
+            {
+                ViewBag.Message = "Er zijn geen games beschikbaar.";
+                return View(new List<Game>());
+            }
+
+            return View(games); // Zorg dat dit overeenkomt met je view
         }
 
         public IActionResult Privacy()
         {
-            return View(); // Views/Home/Privacy.cshtml
+            return View();
         }
     }
 }
