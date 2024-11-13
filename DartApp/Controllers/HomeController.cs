@@ -1,32 +1,31 @@
+using DartApp.Data;
 using DartApp.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 
 namespace DartApp.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly DartAppContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(DartAppContext context)
         {
-            _logger = logger;
+            _context = context;
         }
 
         public IActionResult Index()
         {
-            return View();
+            // Haal een lijst van games op uit de database
+            var games = _context.Games.Include(g => g.GameMode).ToList();
+
+            // Geef deze lijst door aan de view
+            return View(games); // Past bij Views/Home/Index.cshtml
         }
 
         public IActionResult Privacy()
         {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View(); // Views/Home/Privacy.cshtml
         }
     }
 }

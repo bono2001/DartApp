@@ -6,23 +6,7 @@ public class Tactics : GameMode
 
     public Tactics()
     {
-        GameModeId = 3;
         Name = "Tactics";
-        TacticsTargets = new List<TacticsTarget>
-        {
-            new TacticsTarget { Value = 10, HitsRequired = 3 },
-            new TacticsTarget { Value = 11, HitsRequired = 3 },
-            new TacticsTarget { Value = 12, HitsRequired = 3 },
-            new TacticsTarget { Value = 13, HitsRequired = 3 },
-            new TacticsTarget { Value = 14, HitsRequired = 3 },
-            new TacticsTarget { Value = 15, HitsRequired = 3 },
-            new TacticsTarget { Value = 16, HitsRequired = 3 },
-            new TacticsTarget { Value = 17, HitsRequired = 3 },
-            new TacticsTarget { Value = 18, HitsRequired = 3 },
-            new TacticsTarget { Value = 19, HitsRequired = 3 },
-            new TacticsTarget { Value = 20, HitsRequired = 3 },
-            new TacticsTarget { Value = 25, HitsRequired = 3 }
-        };
     }
 
     public override void StartGame()

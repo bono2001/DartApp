@@ -4,7 +4,6 @@
     {
         public GameMode501()
         {
-            GameModeId = 2;
             Name = "501";
         }
 
