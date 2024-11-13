@@ -31,7 +31,7 @@ namespace DartApp.Controllers
                 CurrentScore = 301 // Beginscore
             };
 
-            return View(model); // Views/Games/Index.cshtml
+            return View("Index", model); // Views/Games/Index.cshtml
         }
     }
 }
